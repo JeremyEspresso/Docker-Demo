@@ -1,0 +1,31 @@
+version: "3.7"
+services:
+  api-external:
+    image: dockerdemo-api-external
+    build:
+      context: .
+      dockerfile: ./services/DockerDemo.External/src/Dockerfile
+    depends_on:
+      - api-internal
+    ports:
+      - "5001:80"
+      - "5999:443"
+    networks:
+      - internal
+      - external
+
+  api-internal:
+    image: dockerdemo-api-internal
+    build:
+      context: .
+      dockerfile: ./services/DockerDemo.Internal/src/Dockerfile  
+    networks:
+      - internal
+
+networks:
+  external:
+    driver: bridge
+  internal:
+    driver: bridge
+    internal: true
+
